@@ -31,3 +31,9 @@ variable "waypoint_application" {
     error_message = "waypoint_application must not contain dashes or underscores."
   }
 }
+
+variable "resource_group_name" {
+  type        = string
+  description = "Name of the resource group"
+  default     = "AIHUB-TFE-POC"
+}
