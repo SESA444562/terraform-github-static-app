@@ -1,24 +1,3 @@
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "~> 5.0"
-    }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 3.90.0"
-    }
-  }
-}
-
-provider "github" {
-  owner = var.destination_org
-  token = var.gh_token
-}
-
-provider "azurerm" {
-  features {}
-}
 
 resource "github_repository" "gh_repo" {
   name       = var.waypoint_application
@@ -63,10 +42,16 @@ data "azurerm_resource_group" "existing" {
   name = var.resource_group_name
 }
 
-resource "azurerm_key_vault" "test-add-on" {
-  name                = "kv-test-add-on"
-  resource_group_name = data.azurerm_resource_group.existing.name
-  location            = data.azurerm_resource_group.existing.location
-  sku_name            = "standard"
-  tenant_id           = "db8e2ba9-95c1-4fbb-b558-6bf8bb1d2981"
+resource "azurerm_application_insights" "appi" {
+  name                          = "appi-test-add-on"
+  location                      = data.azurerm_resource_group.existing.location
+  resource_group_name           = data.azurerm_resource_group.existing.name
+  application_type              = "web"
+  local_authentication_disabled = true
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
