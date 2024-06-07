@@ -17,7 +17,7 @@ resource "github_repository" "gh_repo" {
 
 resource "github_repository_file" "readme" {
   repository = github_repository.gh_repo.name
-  branch     = "main"
+  branch     = "develop"
   file       = "README.md"
   content = templatefile("${path.module}/templates/README.md", {
     application_name = var.waypoint_application,
